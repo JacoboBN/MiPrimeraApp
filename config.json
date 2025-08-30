@@ -1,0 +1,16 @@
+{
+  "version": "1.0.0",
+  "app_name": "Mi Primera App",
+  "description": "Aplicación de ejemplo con actualizaciones automáticas",
+  "last_updated": "2024-01-01",
+  "features": [
+    "Registro de usuario",
+    "Cálculo de edad",
+    "Actualizaciones automáticas"
+  ],
+  "settings": {
+    "check_updates_on_startup": true,
+    "auto_update": true,
+    "theme": "default"
+  }
+}
