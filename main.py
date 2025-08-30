@@ -28,51 +28,23 @@ class MiApp:
         # Cargar o solicitar datos del usuario
         self.setup_ui()
         
-
     def check_updates(self):
         """Verifica si hay actualizaciones disponibles"""
-        print("🔍 Verificando actualizaciones...")
         try:
             # Obtener versión remota
-            print(f"📡 Consultando: {self.config_url}")
             response = requests.get(self.config_url, timeout=5)
-            print(f"✅ Respuesta HTTP: {response.status_code}")
-            
             if response.status_code == 200:
                 remote_config = response.json()
                 remote_version = remote_config.get("version", "1.0.0")
-                print(f"🌐 Versión remota: {remote_version}")
                 
                 # Obtener versión local
                 local_version = self.get_local_version()
-                print(f"💻 Versión local: {local_version}")
                 
                 if remote_version != local_version:
-                    print("🔄 ¡Actualizando!")
                     self.update_app(remote_version)
-                else:
-                    print("✅ App actualizada")
+                    
         except Exception as e:
             print(f"No se pudo verificar actualizaciones: {e}")
-
-    #         print(f"No se pudo verificar actualizaciones: {e}")
-    # def check_updates(self):
-    #     """Verifica si hay actualizaciones disponibles"""
-    #     try:
-    #         # Obtener versión remota
-    #         response = requests.get(self.config_url, timeout=5)
-    #         if response.status_code == 200:
-    #             remote_config = response.json()
-    #             remote_version = remote_config.get("version", "1.0.0")
-                
-    #             # Obtener versión local
-    #             local_version = self.get_local_version()
-                
-    #             if remote_version != local_version:
-    #                 self.update_app(remote_version)
-                    
-    #     except Exception as e:
-    #         print(f"No se pudo verificar actualizaciones: {e}")
     
     def get_local_version(self):
         """Obtiene la versión local de la aplicación"""
@@ -85,9 +57,9 @@ class MiApp:
         return "1.0.0"
     
     def update_app(self, new_version):
-        """Actualiza la aplicación"""
+        """Actualiza la aplicación descargando nuevo código"""
         try:
-            # Descargar nueva versión
+            # Descargar nueva versión del código
             response = requests.get(self.app_url)
             if response.status_code == 200:
                 # Guardar nueva versión
@@ -98,27 +70,63 @@ class MiApp:
                 with open(self.version_file, 'w') as f:
                     f.write(new_version)
                 
-                # Reemplazar archivo actual y reiniciar
-                self.restart_app()
+                # Mostrar mensaje de actualización
+                self.show_update_message()
                 
         except Exception as e:
             print(f"Error al actualizar: {e}")
     
-    def restart_app(self):
-        """Reinicia la aplicación con la nueva versión"""
+    def show_update_message(self):
+        """Muestra mensaje de actualización disponible"""
+        # Limpiar ventana
+        for widget in self.root.winfo_children():
+            widget.destroy()
+        
+        # Marco principal
+        main_frame = tk.Frame(self.root, bg="#e3f2fd")
+        main_frame.pack(fill="both", expand=True, padx=20, pady=20)
+        
+        # Icono de actualización (usando texto)
+        icon_label = tk.Label(main_frame, text="🔄", font=("Arial", 48), bg="#e3f2fd")
+        icon_label.pack(pady=20)
+        
+        # Mensaje
+        update_text = "¡Actualización disponible!\n\nSe ha descargado una nueva versión.\nReinicia la aplicación para aplicar los cambios."
+        update_label = tk.Label(main_frame, text=update_text, 
+                               font=("Arial", 12), 
+                               bg="#e3f2fd", fg="#1976d2",
+                               justify="center")
+        update_label.pack(pady=20)
+        
+        # Botón para reiniciar manualmente
+        restart_btn = tk.Button(main_frame, text="Reiniciar ahora", 
+                               font=("Arial", 12, "bold"),
+                               bg="#2196F3", fg="white",
+                               padx=20, pady=10,
+                               command=self.manual_restart)
+        restart_btn.pack(pady=10)
+        
+        # Botón para continuar sin actualizar
+        continue_btn = tk.Button(main_frame, text="Continuar con versión actual", 
+                                font=("Arial", 10),
+                                command=self.continue_without_update)
+        continue_btn.pack(pady=5)
+    
+    def manual_restart(self):
+        """Reinicia manualmente la aplicación"""
         try:
-            # Reemplazar archivo actual
+            # Ejecutar nueva versión si existe
             if os.path.exists("main_new.py"):
-                if os.path.exists("main_old.py"):
-                    os.remove("main_old.py")
-                os.rename("main.py", "main_old.py")
-                os.rename("main_new.py", "main.py")
-                
-                # Reiniciar aplicación
-                subprocess.Popen([sys.executable, "main.py"])
-                sys.exit()
+                subprocess.Popen([sys.executable, "main_new.py"])
+            sys.exit()
         except Exception as e:
             print(f"Error al reiniciar: {e}")
+            # Si falla, continuar normal
+            self.continue_without_update()
+    
+    def continue_without_update(self):
+        """Continúa sin actualizar"""
+        self.setup_ui()
     
     def load_user_data(self):
         """Carga los datos del usuario desde archivo local"""
@@ -232,7 +240,7 @@ class MiApp:
         main_frame.pack(fill="both", expand=True, padx=20, pady=20)
         
         # Mensaje de saludo
-        greeting_text = f"hello there {name}!\n\nTienes {age} años"
+        greeting_text = f"¡Hola {name}!\n\nTienes {age} años"
         greeting_label = tk.Label(main_frame, text=greeting_text, 
                                  font=("Arial", 18, "bold"), 
                                  bg="#f0f0f0", fg="#2196F3")
