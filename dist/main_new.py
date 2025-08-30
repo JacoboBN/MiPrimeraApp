@@ -240,7 +240,7 @@ class MiApp:
         main_frame.pack(fill="both", expand=True, padx=20, pady=20)
         
         # Mensaje de saludo
-        greeting_text = f"¡Hola {name}!\n\nTienes {age} años"
+        greeting_text = f"BUENASSSSSS {name}!\n\nTienes {age} años"
         greeting_label = tk.Label(main_frame, text=greeting_text, 
                                  font=("Arial", 18, "bold"), 
                                  bg="#f0f0f0", fg="#2196F3")
