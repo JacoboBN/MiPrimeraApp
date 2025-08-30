@@ -16,8 +16,8 @@ class MiApp:
         self.root.resizable(False, False)
         
         # URLs de configuración (CAMBIAR POR TUS URLs DE GITHUB)
-        self.config_url = "https://github.com/JacoboBN/MiPrimeraApp/main/config.json"
-        self.app_url = "https://github.com/JacoboBN/MiPrimeraApp/main/main.py"
+        self.config_url = "https://raw.githubusercontent.com/JacoboBN/MiPrimeraApp/main/config.json"
+        self.app_url = "https://raw.githubusercontent.com/JacoboBN/MiPrimeraApp/main/main.py"
         
         self.user_data_file = "user_data.json"
         self.version_file = "version.txt"
@@ -204,7 +204,7 @@ class MiApp:
         main_frame.pack(fill="both", expand=True, padx=20, pady=20)
         
         # Mensaje de saludo
-        greeting_text = f"BUENASSS {name}!\n\nTienes {age} años"
+        greeting_text = f"Hello {name}!\n\nTienes {age} años"
         greeting_label = tk.Label(main_frame, text=greeting_text, 
                                  font=("Arial", 18, "bold"), 
                                  bg="#f0f0f0", fg="#2196F3")
