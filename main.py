@@ -28,23 +28,51 @@ class MiApp:
         # Cargar o solicitar datos del usuario
         self.setup_ui()
         
+
     def check_updates(self):
         """Verifica si hay actualizaciones disponibles"""
+        print("🔍 Verificando actualizaciones...")
         try:
             # Obtener versión remota
+            print(f"📡 Consultando: {self.config_url}")
             response = requests.get(self.config_url, timeout=5)
+            print(f"✅ Respuesta HTTP: {response.status_code}")
+            
             if response.status_code == 200:
                 remote_config = response.json()
                 remote_version = remote_config.get("version", "1.0.0")
+                print(f"🌐 Versión remota: {remote_version}")
                 
                 # Obtener versión local
                 local_version = self.get_local_version()
+                print(f"💻 Versión local: {local_version}")
                 
                 if remote_version != local_version:
+                    print("🔄 ¡Actualizando!")
                     self.update_app(remote_version)
-                    
+                else:
+                    print("✅ App actualizada")
         except Exception as e:
             print(f"No se pudo verificar actualizaciones: {e}")
+
+    #         print(f"No se pudo verificar actualizaciones: {e}")
+    # def check_updates(self):
+    #     """Verifica si hay actualizaciones disponibles"""
+    #     try:
+    #         # Obtener versión remota
+    #         response = requests.get(self.config_url, timeout=5)
+    #         if response.status_code == 200:
+    #             remote_config = response.json()
+    #             remote_version = remote_config.get("version", "1.0.0")
+                
+    #             # Obtener versión local
+    #             local_version = self.get_local_version()
+                
+    #             if remote_version != local_version:
+    #                 self.update_app(remote_version)
+                    
+    #     except Exception as e:
+    #         print(f"No se pudo verificar actualizaciones: {e}")
     
     def get_local_version(self):
         """Obtiene la versión local de la aplicación"""
